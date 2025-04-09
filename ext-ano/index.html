@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta por Ano</title>
+    <link rel="shortcut icon" href="/img/ano-icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/ext-ano/style/style.css">
+</head>
+<body>
+
+<div class="container">
+    <form id="consultaForm" class="form">
+        <h1>Consulta por Ano</h1>
+
+        <div class="input-group">
+            <label for="ano">Ano:</label>
+            <input type="text" id="ano" name="ano" required>
+        </div>
+
+        <div class="input-group">
+            <label for="id_ativo">ID Ativo:</label>
+            <input type="text" id="id_ativo" name="id_ativo" required>
+        </div>
+
+        <div class="buttons">
+            <button type="button" onclick="formatarConsulta()">Formatar Consulta</button>
+            <button type="button" onclick="limparCampos()">Limpar Campos</button>
+            <a href="/home/index.html"><button type="button">Home</button></a>
+        </div>
+
+        <textarea id="consultaFormatada" rows="6" cols="60" readonly></textarea>
+
+        <div id="queryResults" style="display: none;">
+            Query Results: <a id="downloadLink" href="#" download>Download</a>
+        </div>
+    </form>
+</div>
+
+<script>
+function formatarConsulta() {
+    const ano = document.getElementById('ano').value;
+    const idAtivo = document.getElementById('id_ativo').value;
+
+    const consulta = `SELECT *\nFROM "fulltrack"."tbl_tracking"\nWHERE year = '${ano}'\n  AND id_ativo = ${idAtivo}\nORDER BY dt_gps;`;
+
+    document.getElementById('consultaFormatada').value = consulta;
+}
+
+function limparCampos() {
+    document.getElementById('ano').value = '';
+    document.getElementById('id_ativo').value = '';
+    document.getElementById('consultaFormatada').value = '';
+    document.getElementById('queryResults').style.display = 'none';
+}
+</script>
+
+</body>
+</html>

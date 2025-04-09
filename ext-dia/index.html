@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consulta por Dia</title>
+  <link rel="stylesheet" href="/ext-dia/style/style.css">
+  <link rel="shortcut icon" href="/img/day-icon.svg" type="image/x-icon">
+</head>
+<body>
+  <div class="container">
+    <h1>Consulta por Dia</h1>
+    <form class="form" id="consultaForm">
+      <label for="ano">Ano:</label>
+      <input type="text" id="ano" name="ano" required>
+
+      <label for="mes">Mês:</label>
+      <input type="text" id="mes" name="mes" required>
+
+      <label for="diaInicial">Dia Inicial:</label>
+      <input type="text" id="diaInicial" name="diaInicial" required>
+
+      <label for="diaFinal">Dia Final:</label>
+      <input type="text" id="diaFinal" name="diaFinal" required>
+
+      <label for="id_ativo">ID Ativo:</label>
+      <input type="text" id="id_ativo" name="id_ativo" required>
+
+      <div class="button-group">
+        <button type="button" onclick="formatarConsulta()">Formatar Consulta</button>
+        <button type="button" onclick="limparCampos()">Limpar Campos</button>
+        <a href="/home/index.html"><button type="button">Home</button></a>
+      </div>
+
+      <textarea id="consultaFormatada" rows="7" readonly></textarea>
+    </form>
+  </div>
+
+  <script>
+    function formatarConsulta() {
+      const ano = document.getElementById('ano').value;
+      const mes = document.getElementById('mes').value;
+      const diaInicial = parseInt(document.getElementById('diaInicial').value);
+      const diaFinal = parseInt(document.getElementById('diaFinal').value);
+      const idAtivo = document.getElementById('id_ativo').value;
+
+      let dias = [];
+      for (let i = diaInicial; i <= diaFinal; i++) {
+        dias.push("'" + i.toString() + "'");
+      }
+
+      const query = `
+SELECT *
+FROM "fulltrack"."tbl_tracking"
+WHERE year = '${ano}'
+  AND month = '${mes}'
+  AND day IN (${dias.join(", ")})
+  AND id_ativo = ${idAtivo}
+ORDER BY dt_gps;`;
+
+      document.getElementById('consultaFormatada').value = query.trim();
+    }
+
+    function limparCampos() {
+      document.getElementById('ano').value = '';
+      document.getElementById('mes').value = '';
+      document.getElementById('diaInicial').value = '';
+      document.getElementById('diaFinal').value = '';
+      document.getElementById('id_ativo').value = '';
+      document.getElementById('consultaFormatada').value = '';
+    }
+  </script>
+</body>
+</html>

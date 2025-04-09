@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta por Mês</title>
+    <link rel="shortcut icon" href="/img/cloud-icon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="/ext-mes/style/style.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Consulta por Mês</h2>
+        <form id="consultaForm" class="form">
+            <label for="ano">Ano:</label>
+            <input type="text" id="ano" name="ano" required>
+
+            <label for="mesInicial">Mês Inicial:</label>
+            <input type="text" id="mesInicial" name="mesInicial" required>
+
+            <label for="mesFinal">Mês Final:</label>
+            <input type="text" id="mesFinal" name="mesFinal" required>
+
+            <label for="id_ativo">ID Ativo:</label>
+            <input type="text" id="id_ativo" name="id_ativo" required>
+
+            <button type="button" onclick="formatarConsulta()">Formatar Consulta</button>
+            <button type="button" onclick="limparCampos()">Limpar Campos</button>
+            <a href="/home/index.html"><button type="button">Home</button></a>
+
+            <textarea id="consultaFormatada" rows="7" cols="60" readonly></textarea>
+        </form>
+    </div>
+
+    <script>
+        function formatarConsulta() {
+            const ano = document.getElementById('ano').value;
+            const mesInicial = parseInt(document.getElementById('mesInicial').value);
+            const mesFinal = parseInt(document.getElementById('mesFinal').value);
+            const idAtivo = document.getElementById('id_ativo').value;
+
+            let meses = [];
+            for (let i = mesInicial; i <= mesFinal; i++) {
+                meses.push("'" + i.toString() + "'");
+            }
+
+            const query = `
+SELECT *
+FROM "fulltrack"."tbl_tracking"
+WHERE year = '${ano}'
+  AND month IN (${meses.join(", ")})
+  AND id_ativo = ${idAtivo}
+ORDER BY dt_gps;`;
+
+            document.getElementById('consultaFormatada').value = query.trim();
+        }
+
+        function limparCampos() {
+            document.getElementById('ano').value = '';
+            document.getElementById('mesInicial').value = '';
+            document.getElementById('mesFinal').value = '';
+            document.getElementById('id_ativo').value = '';
+            document.getElementById('consultaFormatada').value = '';
+        }
+    </script>
+</body>
+</html>

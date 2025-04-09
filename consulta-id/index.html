@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Verificar ID Ativo</title>
+  <link rel="shortcut icon" href="/img/consulta-id.svg" type="image/x-icon">
+  <link rel="stylesheet" href="/consulta-id/style/style.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Verificar ID Ativo</h1>
+    <form class="form">
+      <label for="id_ativo">ID Ativo:</label>
+      <input type="text" id="id_ativo" name="id_ativo" required />
+
+      <div class="buttons">
+        <button type="button" onclick="verificarID()">Verificar ID</button>
+        <button type="button" onclick="limparCampos()">Limpar Campos</button>
+        <a href="/home/index.html"><button type="button">Home</button></a>
+      </div>
+
+      <textarea id="consultaFormatada" rows="5" readonly></textarea>
+    </form>
+  </div>
+
+  <script>
+    function verificarID() {
+      const idAtivo = document.getElementById("id_ativo").value;
+
+      const query = `
+SELECT EXISTS (
+    SELECT 1
+    FROM "fulltrack"."tbl_tracking"
+    WHERE id_ativo = ${idAtivo}
+);`;
+
+      document.getElementById("consultaFormatada").value = query.trim();
+    }
+
+    function limparCampos() {
+      document.getElementById("id_ativo").value = '';
+      document.getElementById("consultaFormatada").value = '';
+    }
+  </script>
+</body>
+</html>
