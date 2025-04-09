@@ -4,63 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Consulta por Mês</title>
-    <link rel="shortcut icon" href="/img/cloud-icon.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="/img/mes-icon.svg" type="image/x-icon">
     <link rel="stylesheet" href="/ext-mes/style/style.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Consulta por Mês</h2>
-        <form id="consultaForm" class="form">
+
+<div class="container">
+    <form id="consultaForm" class="form">
+        <h1>Consulta por Mês</h1>
+
+        <div class="input-group">
             <label for="ano">Ano:</label>
             <input type="text" id="ano" name="ano" required>
+        </div>
 
-            <label for="mesInicial">Mês Inicial:</label>
-            <input type="text" id="mesInicial" name="mesInicial" required>
+        <div class="input-group">
+            <label for="mes_inicial">Mês Inicial:</label>
+            <input type="text" id="mes_inicial" name="mes_inicial" required>
+        </div>
 
-            <label for="mesFinal">Mês Final:</label>
-            <input type="text" id="mesFinal" name="mesFinal" required>
+        <div class="input-group">
+            <label for="mes_final">Mês Final:</label>
+            <input type="text" id="mes_final" name="mes_final" required>
+        </div>
 
+        <div class="input-group">
             <label for="id_ativo">ID Ativo:</label>
             <input type="text" id="id_ativo" name="id_ativo" required>
+        </div>
 
+        <div class="buttons">
             <button type="button" onclick="formatarConsulta()">Formatar Consulta</button>
             <button type="button" onclick="limparCampos()">Limpar Campos</button>
             <a href="/home/index.html"><button type="button">Home</button></a>
+        </div>
 
-            <textarea id="consultaFormatada" rows="7" cols="60" readonly></textarea>
-        </form>
-    </div>
+        <textarea id="consultaFormatada" rows="10" cols="60" readonly></textarea>
+    </form>
+</div>
 
-    <script>
-        function formatarConsulta() {
-            const ano = document.getElementById('ano').value;
-            const mesInicial = parseInt(document.getElementById('mesInicial').value);
-            const mesFinal = parseInt(document.getElementById('mesFinal').value);
-            const idAtivo = document.getElementById('id_ativo').value;
+<script>
+function formatarConsulta() {
+    const ano = document.getElementById('ano').value;
+    const mesInicial = document.getElementById('mes_inicial').value;
+    const mesFinal = document.getElementById('mes_final').value;
+    const idAtivo = document.getElementById('id_ativo').value;
 
-            let meses = [];
-            for (let i = mesInicial; i <= mesFinal; i++) {
-                meses.push("'" + i.toString() + "'");
-            }
-
-            const query = `
-SELECT *
+    const consulta = `
+SELECT
+    id,
+    id_indice,
+    id_cliente,
+    id_ativo,
+    id_motorista,
+    id_rastreador,
+    id_produto,
+    dt_gps,
+    dt_enviado,
+    dt_servidor,
+    dt_loaded,
+    lst_localizacao,
+    year,
+    month,
+    day
 FROM "fulltrack"."tbl_tracking"
 WHERE year = '${ano}'
-  AND month IN (${meses.join(", ")})
+  AND month BETWEEN '${mesInicial}' AND '${mesFinal}'
   AND id_ativo = ${idAtivo}
 ORDER BY dt_gps;`;
 
-            document.getElementById('consultaFormatada').value = query.trim();
-        }
+    document.getElementById('consultaFormatada').value = consulta.trim();
+}
 
-        function limparCampos() {
-            document.getElementById('ano').value = '';
-            document.getElementById('mesInicial').value = '';
-            document.getElementById('mesFinal').value = '';
-            document.getElementById('id_ativo').value = '';
-            document.getElementById('consultaFormatada').value = '';
-        }
-    </script>
+function limparCampos() {
+    document.getElementById('ano').value = '';
+    document.getElementById('mes_inicial').value = '';
+    document.getElementById('mes_final').value = '';
+    document.getElementById('id_ativo').value = '';
+    document.getElementById('consultaFormatada').value = '';
+}
+</script>
+
 </body>
 </html>
