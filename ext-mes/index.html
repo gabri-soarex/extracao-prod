@@ -64,12 +64,12 @@ SELECT
     dt_servidor,
     dt_loaded,
     lst_localizacao,
-    year,
-    month,
+    CAST(year AS INT) AS year,
+    CAST(month AS INT) AS month,
     day
 FROM "fulltrack"."tbl_tracking"
-WHERE year = '${ano}'
-  AND month BETWEEN '${mesInicial}' AND '${mesFinal}'
+WHERE CAST(year AS INT) = ${ano}
+  AND CAST(month AS INT) BETWEEN ${mesInicial} AND ${mesFinal}
   AND id_ativo = ${idAtivo}
 ORDER BY dt_gps;`;
 

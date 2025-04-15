@@ -29,11 +29,10 @@
       const idAtivo = document.getElementById("id_ativo").value;
 
       const query = `
-SELECT EXISTS (
-    SELECT 1
-    FROM "fulltrack"."tbl_tracking"
-    WHERE id_ativo = ${idAtivo}
-);`;
+SELECT CAST(year AS INT) AS ano
+FROM "fulltrack"."tbl_tracking"
+WHERE id_ativo = ${idAtivo}
+LIMIT 1;`;
 
       document.getElementById("consultaFormatada").value = query.trim();
     }
